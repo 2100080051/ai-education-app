@@ -1,0 +1,10 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore environment settings
+.env
+
+# Ignore IDE/editor settings
+.idea/
+.vscode/

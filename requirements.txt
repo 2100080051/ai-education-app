@@ -1,0 +1,7 @@
+streamlit
+gtts
+deep-translator
+python-dotenv
+openai
+streamlit-lottie
+requests
