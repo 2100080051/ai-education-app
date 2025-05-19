@@ -5,6 +5,7 @@ __pycache__/
 # Ignore environment settings
 .env
 .streamlit/secrets.toml
+
 # Ignore IDE/editor settings
 .idea/
 .vscode/
