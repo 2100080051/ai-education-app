@@ -1,9 +1,12 @@
 import requests
 import os
 from dotenv import load_dotenv
+import streamlit as st
+
+api_key = st.secrets["API_KEY"]
+
 
 load_dotenv()
-TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY")
 
 def generate_story(concept, grade, subject):
     prompt = (
