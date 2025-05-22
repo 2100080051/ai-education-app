@@ -2,9 +2,9 @@ import streamlit as st
 from story_generator import generate_story
 from translator import translate
 from tts import generate_audio
-import streamlit as st
 
-api_key = st.secrets["API_KEY"]
+# Read the API key from Streamlit secrets
+api_key = st.secrets["TOGETHER_API_KEY"]
 
 
 # Custom CSS to style headers and page
@@ -65,14 +65,14 @@ if generate_btn and concept.strip():
             f"'{concept}' in {subject}, but do not directly say the concept name. "
             "Make it interesting and easy to understand for kids."
         )
-        story_en = generate_story(story_prompt, grade, subject)
+        story_en = generate_story(story_prompt, grade, subject, api_key)
 
         # Generate explanation (direct, no story)
         explanation_prompt = (
             f"Explain the concept '{concept}' from {subject} in simple, clear, and brief terms for grade {grade} students. "
             "Do not tell a story or use analogies; just explain the concept directly."
         )
-        explanation_en = generate_story(explanation_prompt, grade, subject)
+        explanation_en = generate_story(explanation_prompt, grade, subject, api_key)
 
     # Show results in two columns: English & Selected language
     col1, col2 = st.columns(2)
