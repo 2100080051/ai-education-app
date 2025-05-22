@@ -2,21 +2,14 @@ import requests
 import os
 from dotenv import load_dotenv
 import streamlit as st
-
-
-TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"]
-
-
-load_dotenv()
-
-def generate_story(concept, grade, subject):
+def generate_story(concept, grade, subject, api_key):
     prompt = (
         f"Write a fun and simple story that explains the concept '{concept}' "
         f"to a grade {grade} student in {subject}. Make it creative and easy to understand for children."
     )
 
     headers = {
-        "Authorization": f"Bearer {TOGETHER_API_KEY}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 
