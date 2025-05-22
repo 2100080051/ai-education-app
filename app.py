@@ -1,11 +1,10 @@
 import streamlit as st
-from story_generator import generate_story
+from story_generator import generate_story_full_prompt
 from translator import translate
 from tts import generate_audio
 
 # Read the API key from Streamlit secrets
 api_key = st.secrets["TOGETHER_API_KEY"]
-
 
 # Custom CSS to style headers and page
 st.markdown(
@@ -59,20 +58,20 @@ st.markdown("---")
 
 if generate_btn and concept.strip():
     with st.spinner("Generating story and explanation..."):
-        # Generate story
+        # Prepare prompts
         story_prompt = (
             f"Write a fun, creative story for grade {grade} students that teaches the concept "
             f"'{concept}' in {subject}, but do not directly say the concept name. "
             "Make it interesting and easy to understand for kids."
         )
-        story_en = generate_story(story_prompt, grade, subject, api_key)
-
-        # Generate explanation (direct, no story)
         explanation_prompt = (
             f"Explain the concept '{concept}' from {subject} in simple, clear, and brief terms for grade {grade} students. "
             "Do not tell a story or use analogies; just explain the concept directly."
         )
-        explanation_en = generate_story(explanation_prompt, grade, subject, api_key)
+
+        # Generate story and explanation using the updated function
+        story_en = generate_story_full_prompt(story_prompt, api_key)
+        explanation_en = generate_story_full_prompt(explanation_prompt, api_key)
 
     # Show results in two columns: English & Selected language
     col1, col2 = st.columns(2)
@@ -81,14 +80,20 @@ if generate_btn and concept.strip():
         st.markdown('<div class="section-header">📖 Story in English</div>', unsafe_allow_html=True)
         with st.expander("Show Story"):
             st.write(story_en)
-            audio_en_story = generate_audio(story_en, "en", "english_story")
-            st.audio(audio_en_story)
+            if story_en and not story_en.lower().startswith("error"):
+                audio_en_story = generate_audio(story_en, "en", "english_story")
+                st.audio(audio_en_story)
+            else:
+                st.warning("Story could not be generated.")
 
         st.markdown('<div class="section-header">🧠 Explanation in English</div>', unsafe_allow_html=True)
         with st.expander("Show Explanation"):
             st.write(explanation_en)
-            audio_en_exp = generate_audio(explanation_en, "en", "english_explanation")
-            st.audio(audio_en_exp)
+            if explanation_en and not explanation_en.lower().startswith("error"):
+                audio_en_exp = generate_audio(explanation_en, "en", "english_explanation")
+                st.audio(audio_en_exp)
+            else:
+                st.warning("Explanation could not be generated.")
 
     with col2:
         if language != "English":
@@ -96,15 +101,17 @@ if generate_btn and concept.strip():
             with st.expander(f"Show Story in {language}"):
                 story_translated = translate(story_en, languages[language])
                 st.write(story_translated)
-                audio_trans_story = generate_audio(story_translated, languages[language], "translated_story")
-                st.audio(audio_trans_story)
+                if story_translated:
+                    audio_trans_story = generate_audio(story_translated, languages[language], "translated_story")
+                    st.audio(audio_trans_story)
 
             st.markdown(f'<div class="section-header">🧠 Explanation in {language}</div>', unsafe_allow_html=True)
             with st.expander(f"Show Explanation in {language}"):
                 explanation_translated = translate(explanation_en, languages[language])
                 st.write(explanation_translated)
-                audio_trans_exp = generate_audio(explanation_translated, languages[language], "translated_explanation")
-                st.audio(audio_trans_exp)
+                if explanation_translated:
+                    audio_trans_exp = generate_audio(explanation_translated, languages[language], "translated_explanation")
+                    st.audio(audio_trans_exp)
         else:
             st.info("English is selected as the language, so content is shown on the left.")
 
