@@ -1,7 +1,5 @@
 streamlit
-gtts
-deep-translator
-python-dotenv
-openai
-streamlit-lottie
 requests
+python-dotenv
+googletrans==4.0.0-rc1
+gTTS
