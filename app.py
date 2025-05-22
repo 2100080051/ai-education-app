@@ -118,4 +118,4 @@ if generate_btn and concept.strip():
 else:
     st.info("Please enter a concept and click 'Generate Story & Explanation' to begin.")
 
-st.markdown('<div class="footer">Developed with ❤️ by YourName</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Developed with ❤️ by Mummidivarapu Sri Sai Nikshith</div>', unsafe_allow_html=True)
