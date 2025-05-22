@@ -1,16 +1,13 @@
 import requests
 import streamlit as st
+import requests
 
 TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"]
 
-def generate_story(concept, grade, subject):
-    prompt = (
-        f"Write a fun and simple story that explains the concept '{concept}' "
-        f"to a grade {grade} student in {subject}. Make it creative and easy to understand for children."
-    )
 
+def generate_story_full_prompt(prompt, api_key):
     headers = {
-        "Authorization": f"Bearer {TOGETHER_API_KEY}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 
@@ -29,9 +26,8 @@ def generate_story(concept, grade, subject):
             json=data,
             timeout=15
         )
-        response.raise_for_status()  # Raises HTTPError if status != 200
+        response.raise_for_status()
         result = response.json()
-
         text = result.get('choices', [{}])[0].get('text', '').strip()
         if text:
             return text
@@ -39,7 +35,6 @@ def generate_story(concept, grade, subject):
             return "Sorry, no story could be generated at this time."
 
     except requests.exceptions.RequestException as e:
-        # Log the error if needed, here just returning friendly message
         return f"Error contacting API: {e}"
 
     except Exception as e:
