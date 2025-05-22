@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 import streamlit as st
 
-api_key = st.secrets["API_KEY"]
+
+TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"]
 
 
 load_dotenv()
